@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>REU</title>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
+</head>
+<body>
+	<div id="app">
+		<div id="ResponseContent">
+			<h2>Obteniendo api</h2>
+		</div>
+		<div class="table-responsive">
+			<table class="table align-middle">
+				<thead>
+					<tr>
+						<th colspan="2">MINER YEILD</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>DAILY REWARD</td>
+						<td>{{ income | currencydecimal }}$</td>
+					</tr>
+					<tr>
+						<td>OVER CLOCK RATE</td>
+						<td>{{ocr}}%</td>
+					</tr>
+					<tr>
+						<td>TOTAL REWARD</td>
+						<td>{{ (income*(ocr/100)+income) | currencydecimal }}$</td>
+					</tr>
+					<tr>
+						<td>POWER BILL</td>
+						<td>{{ pb }}$</td>
+					</tr>
+					<tr>
+						<td rowspan="2">LIQUID EFFICIENCY</td>
+						<td>{{ le }}</td>
+					</tr>
+					<tr>
+						<td>{{ pb*le }}</td>
+					</tr>
+					<tr>
+						<td>DAILY REWARD</td>
+						<td>{{ income | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>DAILY REWARD</td>
+						<td>{{ income | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>DAILY REWARD</td>
+						<td>{{ income | currencydecimal }}</td>
+					</tr>
+					<tr class="align-bottom">
+						...
+					</tr>
+					<tr>
+						<td>...</td>
+						<td>...</td>
+						<td class="align-top">This cell is aligned to the top.</td>
+						<td>...</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		
+		<h1>Listado de Precio de Bitcoin</h1>
+	
+		<section v-if="errored">
+			<p>Lo sentimos, no es posible obtener la información en este momento, por favor intente nuevamente mas tarde</p>
+		</section>
+	
+		<section v-else>
+			<div v-if="loading">Cargando...</div>
+	
+			<div v-else>
+				{{ income }}:
+				<span class="lighten">
+					<span></span>{{ income | currencydecimal }}
+				</span>
+			</div>
+	
+		</section>
+	</div>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data () {
+				return {
+					info: null,
+					income: 0,
+					ocr: 30,
+					pb: -9.38,
+					le: -10,
+					loading: true,
+					errored: false
+			}
+		},
+		filters: {
+			currencydecimal (value) {
+				return value.toFixed(2)
+			}
+		},
+		mounted () {
+			axios.get('https://api.minerstat.com/v2/coins?list=BTC')
+			.then(response => {
+				datos = response.data[0]
+				var rpb = Number.parseFloat(datos.reward_block)
+				var hasrate = Number.parseFloat(100000000000000)
+				var dif = Number.parseFloat(datos.difficulty)
+				var resultbtc = (rpb * hasrate * 86400) / (dif * Math.pow(2, 32))
+				this.income = resultbtc*datos.price
+				
+			})
+			.catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+			.finally(() => this.loading = false)
+		}
+	})
+	
+	
+	/*
+		window.onload = function() {
+			$.ajax({
+				type: 'GET',
+				url: 'https://api.minerstat.com/v2/coins?list=BTC',
+				success: function(response) {
+					var rpb = Number.parseFloat(response[0].reward_block);
+					var hasrate = Number.parseFloat(100000000000000);
+					var dif = Number.parseFloat(response[0].difficulty);
+					var resultbtc = (rpb * hasrate * 86400) / (dif * Math.pow(2, 32));
+					var income = resultbtc*response[0].price;
+					var elem = document.getElementById('ResponseContent');
+					elem.innerHTML = "<h2>"+income.toFixed(2)+"</h2>";
+				}
+			}).fail(function() {
+				alert("Ha ocurrido un error intentando obtener los datos de la api!");
+			});
+			console.log( "ready!" );
+			
+		};*/
+	</script>
+</body>
+</html>
