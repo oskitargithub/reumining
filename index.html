@@ -5,116 +5,243 @@
 <title>REU</title>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
-
 </head>
 <body>
 	<div id="app">
 		<div id="ResponseContent">
-			<h2>Obteniendo api</h2>
+			<h2>Precio de BTC {{ btc | currencydecimal }}$</h2>
 		</div>
 		<div class="table-responsive">
 			<table class="table align-middle">
 				<thead>
 					<tr>
-						<th colspan="2">MINER YEILD</th>
+						<th colspan="2">MINER YEILD - 1 Miner</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
 						<td>DAILY REWARD</td>
-						<td>{{ income | currencydecimal }}$</td>
+						<td>{{ miner_yeild.income | currencydecimal }}</td>
 					</tr>
 					<tr>
 						<td>OVER CLOCK RATE</td>
-						<td>{{ocr}}%</td>
+						<td>{{ miner_yeild.over_clock_rate*100 }}%</td>
 					</tr>
 					<tr>
 						<td>TOTAL REWARD</td>
-						<td>{{ (income*(ocr/100)+income) | currencydecimal }}$</td>
+						<td>{{totalReward | currencydecimal}}</td>
 					</tr>
 					<tr>
 						<td>POWER BILL</td>
-						<td>{{ pb }}$</td>
+						<td>{{ miner_yeild.power_bill | currencydecimal }}</td>
 					</tr>
 					<tr>
 						<td rowspan="2">LIQUID EFFICIENCY</td>
-						<td>{{ le }}</td>
+						<td>{{ miner_yeild.liquid_efficiency_rate*100 }}%</td>
 					</tr>
 					<tr>
-						<td>{{ pb*le }}</td>
+						<td>{{ liquid_efficiency  | currencydecimal}}</td>
 					</tr>
 					<tr>
-						<td>DAILY REWARD</td>
-						<td>{{ income | currencydecimal }}</td>
+						<td>OC POWER BILL</td>
+						<td>{{ oc_power_bill | currencydecimal }}</td>
 					</tr>
 					<tr>
-						<td>DAILY REWARD</td>
-						<td>{{ income | currencydecimal }}</td>
+						<td>HOSTING FEE {{ Math.abs(miner_yeild.hosting_fee_rate*100) }}%</td>
+						<td>{{ hosting_fee | currencydecimal }}</td>
 					</tr>
 					<tr>
-						<td>DAILY REWARD</td>
-						<td>{{ income | currencydecimal }}</td>
-					</tr>
-					<tr class="align-bottom">
-						...
+						<td>TOTAL COSTS</td>
+						<td>{{ total_cost | currencydecimal }}</td>
 					</tr>
 					<tr>
-						<td>...</td>
-						<td>...</td>
-						<td class="align-top">This cell is aligned to the top.</td>
-						<td>...</td>
+						<td>TOTAL REWARD</td>
+						<td>{{ total_reward_miner | currencydecimal }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table align-middle">
+				<thead>
+					<tr>
+						<th colspan="2">VOLUME MINER CONVERSION 
+							<my-currency-input v-model="miner_conversion.volumen_per"></my-currency-input> Daily transactions
+						</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td rowspan="2">Miner development fee</td>
+						<td>{{ miner_conversion.miner_tax*100 }}%</td>
+					</tr>
+					<tr>
+						<td>{{ miner_fee_price | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>Cost Per Miner</td>
+						<td>{{miner_conversion.cost_per_miner | currencydecimal}}</td>
+					</tr>
+					<tr>
+						<td>Set up Fee </td>
+						<td>{{miner_conversion.setup_fee * 100}}%</td>
+					</tr>
+					<tr>
+						<td>Total Miner Price</td>
+						<td>{{ price_per_miner | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>QTY Miners</td>
+						<td>{{ qty_miners }}</td>
+					</tr>
+				</tbody>
+			</table>
+			<table class="table align-middle">
+				<thead>
+					<tr>
+						<th colspan="2">{{qty_miners}} Miners liquidity yield back to REU</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>
+							Daily Yield
+							{{ daily_yield | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>
+							Weekly
+							{{ daily_yield*7 | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>
+							Monthly
+							{{ daily_yield * 28 | currencydecimal }}</td>
+					</tr>
+					<tr>
+						<td>
+							Yearly
+							{{ daily_yield*364 | currencydecimal}}</td>
 					</tr>
 				</tbody>
 			</table>
 		</div>
 		
-		<h1>Listado de Precio de Bitcoin</h1>
-	
-		<section v-if="errored">
-			<p>Lo sentimos, no es posible obtener la información en este momento, por favor intente nuevamente mas tarde</p>
-		</section>
-	
-		<section v-else>
-			<div v-if="loading">Cargando...</div>
-	
-			<div v-else>
-				{{ income }}:
-				<span class="lighten">
-					<span></span>{{ income | currencydecimal }}
-				</span>
-			</div>
-	
-		</section>
+		
 	</div>
 	<script type="text/javascript">
+		Vue.component('my-currency-input', {
+    props: ["value"],
+    template: `
+        <div>
+            <input type="text" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true"/>
+        </div>`,
+    data: function() {
+        return {
+            isInputActive: false
+        }
+    },
+    computed: {
+        displayValue: {
+            get: function() {
+                if (this.isInputActive) {
+                    // Cursor is inside the input field. unformat display value for user
+                    return this.value.toString()
+                } else {
+                    // User is not modifying now. Format display value for user interface
+                    return "$ " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+                }
+            },
+            set: function(modifiedValue) {
+                // Recalculate value after ignoring "$" and "," in user input
+                let newValue = parseFloat(modifiedValue.replace(/[^\d\.]/g, ""))
+                // Ensure that it is not NaN
+                if (isNaN(newValue)) {
+                    newValue = 0
+                }
+                // Note: we cannot set this.value as it is a "prop". It needs to be passed to parent component
+                // $emit the event so that parent component gets it
+                this.$emit('input', newValue)
+            }
+        }
+    }
+});
 		new Vue({
 			el: '#app',
 			data () {
 				return {
-					info: null,
-					income: 0,
-					ocr: 30,
-					pb: -9.38,
-					le: -10,
+					miner_yeild: {
+						income: 0,
+						over_clock_rate: 0.3,
+						power_bill: -9.28,
+						liquid_efficiency_rate: -0.1,
+						hosting_fee_rate: -0.05
+					},
+					miner_conversion: {
+						volumen_per: 100000,
+						daily: 30,
+						miner_tax: 0.04,
+						miner_conversion: 10500,
+						setup_fee: 0.33,
+						cost_per_miner: 10500,
+					},
+					btc: 0,
 					loading: true,
 					errored: false
 			}
 		},
+  computed: {
+    totalReward: function () {
+      return (this.miner_yeild.income*this.miner_yeild.over_clock_rate)+this.miner_yeild.income
+    },
+		liquid_efficiency: function () {
+      return (this.miner_yeild.power_bill*this.miner_yeild.liquid_efficiency_rate)
+    },
+		oc_power_bill: function () {
+      return (this.miner_yeild.over_clock_rate*this.miner_yeild.power_bill)
+    },
+		hosting_fee: function () {
+      return (this.totalReward * this.miner_yeild.hosting_fee_rate)
+    },
+		total_cost: function () {
+			return (this.miner_yeild.power_bill + this.liquid_efficiency + this.oc_power_bill + this.hosting_fee)
+		},
+		total_reward_miner: function () {
+      return (this.totalReward + this.total_cost)
+    },
+		volume_daily: function () {
+			return (this.miner_conversion.volumen_per * this.miner_conversion.daily)
+		},
+		miner_fee_price: function () {
+			return (this.volume_daily * this.miner_conversion.miner_tax)
+		},
+		price_per_miner: function () {
+			return ((this.miner_conversion.cost_per_miner*this.miner_conversion.setup_fee) + this.miner_conversion.cost_per_miner)
+		},
+		qty_miners: function () {
+			return Math.floor(this.miner_fee_price / this.price_per_miner)
+		},
+		daily_yield: function () {
+			return (this.total_reward_miner * this.qty_miners)
+		}
+  },
 		filters: {
-			currencydecimal (value) {
+			/*currencydecimal (value) {
 				return value.toFixed(2)
+			},*/
+			currencydecimal (value) {
+				return "$ " + value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
 			}
 		},
 		mounted () {
 			axios.get('https://api.minerstat.com/v2/coins?list=BTC')
 			.then(response => {
 				datos = response.data[0]
+				this.btc = datos.price
 				var rpb = Number.parseFloat(datos.reward_block)
 				var hasrate = Number.parseFloat(100000000000000)
 				var dif = Number.parseFloat(datos.difficulty)
 				var resultbtc = (rpb * hasrate * 86400) / (dif * Math.pow(2, 32))
 				this.income = resultbtc*datos.price
+				this.miner_yeild.income = resultbtc*datos.price
 				
 			})
 			.catch(error => {
@@ -124,28 +251,6 @@
 			.finally(() => this.loading = false)
 		}
 	})
-	
-	
-	/*
-		window.onload = function() {
-			$.ajax({
-				type: 'GET',
-				url: 'https://api.minerstat.com/v2/coins?list=BTC',
-				success: function(response) {
-					var rpb = Number.parseFloat(response[0].reward_block);
-					var hasrate = Number.parseFloat(100000000000000);
-					var dif = Number.parseFloat(response[0].difficulty);
-					var resultbtc = (rpb * hasrate * 86400) / (dif * Math.pow(2, 32));
-					var income = resultbtc*response[0].price;
-					var elem = document.getElementById('ResponseContent');
-					elem.innerHTML = "<h2>"+income.toFixed(2)+"</h2>";
-				}
-			}).fail(function() {
-				alert("Ha ocurrido un error intentando obtener los datos de la api!");
-			});
-			console.log( "ready!" );
-			
-		};*/
 	</script>
 </body>
 </html>
