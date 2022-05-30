@@ -5,134 +5,187 @@
 <title>REU</title>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<style>
+	:root{--global-palette1:#20c224;--global-palette2:#21874a;--global-palette3:#064128;--global-palette4:#2D3748;--global-palette5:#4A5568;--global-palette6:#718096;--global-palette7:#EDF2F7;--global-palette8:#F7FAFC;--global-palette9:#ffffff;--global-palette9rgb:255, 255, 255;--global-palette-highlight:var(--global-palette1);--global-palette-highlight-alt:var(--global-palette2);--global-palette-highlight-alt2:var(--global-palette9);--global-palette-btn-bg:var(--global-palette1);--global-palette-btn-bg-hover:var(--global-palette2);--global-palette-btn:var(--global-palette9);--global-palette-btn-hover:var(--global-palette9);--global-body-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Oxygen-Sans,Ubuntu,Cantarell,"Helvetica Neue",sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";--global-heading-font-family:Merriweather, serif;--global-primary-nav-font-family:inherit;--global-fallback-font:sans-serif;--global-display-fallback-font:sans-serif;--global-content-width:1290px;--global-content-narrow-width:842px;--global-content-edge-padding:1.5rem;--global-calc-content-width:calc(1290px - var(--global-content-edge-padding) - var(--global-content-edge-padding) );}:root .has-theme-palette-1-background-color{background-color:var(--global-palette1);}:root .has-theme-palette-1-color{color:var(--global-palette1);}:root .has-theme-palette-2-background-color{background-color:var(--global-palette2);}:root .has-theme-palette-2-color{color:var(--global-palette2);}:root .has-theme-palette-3-background-color{background-color:var(--global-palette3);}:root .has-theme-palette-3-color{color:var(--global-palette3);}:root .has-theme-palette-4-background-color{background-color:var(--global-palette4);}:root .has-theme-palette-4-color{color:var(--global-palette4);}:root .has-theme-palette-5-background-color{background-color:var(--global-palette5);}:root .has-theme-palette-5-color{color:var(--global-palette5);}:root .has-theme-palette-6-background-color{background-color:var(--global-palette6);}:root .has-theme-palette-6-color{color:var(--global-palette6);}:root .has-theme-palette-7-background-color{background-color:var(--global-palette7);}:root .has-theme-palette-7-color{color:var(--global-palette7);}:root .has-theme-palette-8-background-color{background-color:var(--global-palette8);}:root .has-theme-palette-8-color{color:var(--global-palette8);}:root .has-theme-palette-9-background-color{background-color:var(--global-palette9);}:root .has-theme-palette-9-color{color:var(--global-palette9);}:root .has-theme-palette1-background-color{background-color:var(--global-palette1);}:root .has-theme-palette1-color{color:var(--global-palette1);}:root .has-theme-palette2-background-color{background-color:var(--global-palette2);}:root .has-theme-palette2-color{color:var(--global-palette2);}:root .has-theme-palette3-background-color{background-color:var(--global-palette3);}:root .has-theme-palette3-color{color:var(--global-palette3);}:root .has-theme-palette4-background-color{background-color:var(--global-palette4);}:root .has-theme-palette4-color{color:var(--global-palette4);}:root .has-theme-palette5-background-color{background-color:var(--global-palette5);}:root .has-theme-palette5-color{color:var(--global-palette5);}:root .has-theme-palette6-background-color{background-color:var(--global-palette6);}:root .has-theme-palette6-color{color:var(--global-palette6);}:root .has-theme-palette7-background-color{background-color:var(--global-palette7);}:root .has-theme-palette7-color{color:var(--global-palette7);}:root .has-theme-palette8-background-color{background-color:var(--global-palette8);}:root .has-theme-palette8-color{color:var(--global-palette8);}:root .has-theme-palette9-background-color{background-color:var(--global-palette9);}:root .has-theme-palette9-color{color:var(--global-palette9);}body{background:var(--global-palette8);}body, input, select, optgroup, textarea{font-weight:400;font-size:17px;line-height:1.6;font-family:var(--global-body-font-family);color:var(--global-palette4);}.content-bg, body.content-style-unboxed .site{background:var(--global-palette9);}h1,h2,h3,h4,h5,h6{font-family:var(--global-heading-font-family);}h1{font-style:normal;font-weight:700;font-size:32px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette3);}h2{font-style:normal;font-weight:700;font-size:28px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette3);}h3{font-style:normal;font-weight:700;font-size:24px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette3);}h4{font-style:normal;font-weight:700;font-size:22px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette4);}h5{font-style:normal;font-weight:700;font-size:20px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette4);}h6{font-style:normal;font-weight:700;font-size:18px;line-height:1.5;font-family:Merriweather, serif;color:var(--global-palette5);}.entry-hero .kadence-breadcrumbs{max-width:1290px;}.site-container, .site-header-row-layout-contained, .site-footer-row-layout-contained, .entry-hero-layout-contained, .comments-area, .alignfull > .wp-block-cover__inner-container, .alignwide > .wp-block-cover__inner-container{max-width:var(--global-content-width);}.content-width-narrow .content-container.site-container, .content-width-narrow .hero-container.site-container{max-width:var(--global-content-narrow-width);}@media all and (min-width: 1520px){.wp-site-blocks .content-container  .alignwide{margin-left:-115px;margin-right:-115px;width:unset;max-width:unset;}}@media all and (min-width: 1102px){.content-width-narrow .wp-site-blocks .content-container .alignwide{margin-left:-130px;margin-right:-130px;width:unset;max-width:unset;}}.content-style-boxed .wp-site-blocks .entry-content .alignwide{margin-left:-2rem;margin-right:-2rem;}@media all and (max-width: 1024px){.content-style-boxed .wp-site-blocks .entry-content .alignwide{margin-left:-2rem;margin-right:-2rem;}}@media all and (max-width: 767px){.content-style-boxed .wp-site-blocks .entry-content .alignwide{margin-left:-1.5rem;margin-right:-1.5rem;}}.content-area{margin-top:5rem;margin-bottom:5rem;}@media all and (max-width: 1024px){.content-area{margin-top:3rem;margin-bottom:3rem;}}@media all and (max-width: 767px){.content-area{margin-top:2rem;margin-bottom:2rem;}}.entry-content-wrap{padding:2rem;}@media all and (max-width: 1024px){.entry-content-wrap{padding:2rem;}}@media all and (max-width: 767px){.entry-content-wrap{padding:1.5rem;}}.entry.single-entry{box-shadow:0px 15px 15px -10px rgba(0,0,0,0.05);}.entry.loop-entry{box-shadow:0px 15px 15px -10px rgba(0,0,0,0.05);}.loop-entry .entry-content-wrap{padding:2rem;}@media all and (max-width: 1024px){.loop-entry .entry-content-wrap{padding:2rem;}}@media all and (max-width: 767px){.loop-entry .entry-content-wrap{padding:1.5rem;}}.primary-sidebar.widget-area .widget{margin-bottom:1.5em;color:var(--global-palette4);}.primary-sidebar.widget-area .widget-title{font-weight:700;font-size:20px;line-height:1.5;color:var(--global-palette3);}button, .button, .wp-block-button__link, input[type="button"], input[type="reset"], input[type="submit"], .fl-button, .elementor-button-wrapper .elementor-button{box-shadow:0px 0px 0px -7px rgba(0,0,0,0);}button:hover, button:focus, button:active, .button:hover, .button:focus, .button:active, .wp-block-button__link:hover, .wp-block-button__link:focus, .wp-block-button__link:active, input[type="button"]:hover, input[type="button"]:focus, input[type="button"]:active, input[type="reset"]:hover, input[type="reset"]:focus, input[type="reset"]:active, input[type="submit"]:hover, input[type="submit"]:focus, input[type="submit"]:active, .elementor-button-wrapper .elementor-button:hover, .elementor-button-wrapper .elementor-button:focus, .elementor-button-wrapper .elementor-button:active{box-shadow:0px 15px 25px -7px rgba(0,0,0,0.1);}@media all and (min-width: 1025px){.transparent-header .entry-hero .entry-hero-container-inner{padding-top:80px;}}@media all and (max-width: 1024px){.mobile-transparent-header .entry-hero .entry-hero-container-inner{padding-top:80px;}}@media all and (max-width: 767px){.mobile-transparent-header .entry-hero .entry-hero-container-inner{padding-top:80px;}}.site-middle-footer-inner-wrap{padding-top:30px;padding-bottom:30px;grid-column-gap:30px;grid-row-gap:30px;}.site-middle-footer-inner-wrap .widget{margin-bottom:30px;}.site-middle-footer-inner-wrap .site-footer-section:not(:last-child):after{right:calc(-30px / 2);}.site-top-footer-inner-wrap{padding-top:30px;padding-bottom:30px;grid-column-gap:30px;grid-row-gap:30px;}.site-top-footer-inner-wrap .widget{margin-bottom:30px;}.site-top-footer-inner-wrap .site-footer-section:not(:last-child):after{right:calc(-30px / 2);}.site-bottom-footer-inner-wrap{padding-top:30px;padding-bottom:30px;grid-column-gap:30px;}.site-bottom-footer-inner-wrap .widget{margin-bottom:30px;}.site-bottom-footer-inner-wrap .site-footer-section:not(:last-child):after{right:calc(-30px / 2);}.footer-social-inner-wrap{font-size:1em;margin-top:-0.3em;margin-left:calc(-0.3em / 2);margin-right:calc(-0.3em / 2);}.site-footer .site-footer-wrap .site-footer-section .footer-social-wrap .social-button{margin-top:0.3em;margin-left:calc(0.3em / 2);margin-right:calc(0.3em / 2);border:2px none transparent;border-radius:3px;}#colophon .footer-navigation .footer-menu-container > ul > li > a{padding-left:calc(1.2em / 2);padding-right:calc(1.2em / 2);color:var(--global-palette5);}#colophon .footer-navigation .footer-menu-container > ul li a:hover{color:var(--global-palette-highlight);}#colophon .footer-navigation .footer-menu-container > ul li.current-menu-item > a{color:var(--global-palette3);}body.page{background:var(--global-palette9);}.entry-hero.page-hero-section .entry-header{min-height:200px;}
+	.bkg_tb { 
+		padding: 20px;
+		background-color: #b9d8af;
+		box-shadow: 5px 10px #397d38;
+		border-collapse:separate;
+		border-spacing: 10;
+		border:solid #b9d8af 1px;
+		border-radius:10px;
+		-moz-border-radius:10px;
+		-webkit-border-radius: 5px;  
+	}
+	.bkgamarillo_tb { 
+		padding: 20px;
+		background-color: #fff200;
+		box-shadow: 5px 10px #397d38;
+		border-collapse:separate;
+		border-spacing: 10;
+		border:solid #b9d8af 1px;
+		border-radius:10px;
+		-moz-border-radius:10px;
+		-webkit-border-radius: 5px;  
+	}
+	.titulo_tabla {
+		color: #337a44;
+	}
+	.titulo_tabla2{
+		color: #1f6b34;
+		font-weight: bold;
+	}
+	.amarillo {
+		background-color:#fff200;
+		padding: 5px;
+		border-spacing: 2px;
+		font-weight: bold;
+	}
+	.rojo {
+		color: #d03937;
+	}
+	.grande {
+		font-size: xx-large;
+	}
+</style>
 </head>
 <body>
 	<div id="app">
 		<div id="ResponseContent">
-			<h2>Precio de BTC {{ btc | currencydecimal }}$</h2>
+			<h2 class="titulo_tabla">BTC Price {{ btc | currencydecimal }}</h2>
 		</div>
-		<div class="table-responsive">
-			<table class="table align-middle">
+		<div class="content">
+			<div style=" display: block; float: left; width: 67%;">
+				<table class="table align-middle bkg_tb" >
+					<thead>
+						<tr>
+							<th colspan="2" class="titulo_tabla">Daily Reward - 1 Miner</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="titulo_tabla2">DAILY REWARD</td>
+							<td align="right">{{ miner_yeild.income | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Over Clock (OC) Rate</td>
+							<td align="right">{{ miner_yeild.over_clock_rate*100 }}%</td>
+						</tr>
+						<tr>
+							<td>Total REWARD</td>
+							<td align="right">{{totalReward | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>POWER BILL</td>
+							<td align="right" :class="{rojo: miner_yeild.power_bill < 0}">{{ miner_yeild.power_bill | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td rowspan="2">Liquid Efficiency</td>
+							<td align="right">{{ miner_yeild.liquid_efficiency_rate*100 }}%</td>
+						</tr>
+						<tr>
+							<td align="right">{{ liquid_efficiency  | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>OC Power Bill</td>
+							<td align="right" :class="{rojo: oc_power_bill < 0}">{{ oc_power_bill | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Hosting Fee {{ Math.abs(miner_yeild.hosting_fee_rate*100) }}%</td>
+							<td align="right" :class="{rojo: hosting_fee < 0}">{{ hosting_fee | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Total Cost</td>
+							<td align="right" :class="{rojo: total_cost < 0}">{{ total_cost | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td class="amarillo">TOTAL REWARD</td>
+							<td class="amarillo" align="right">{{ total_reward_miner | currencydecimal }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<br/>
+				<table class="table align-middle bkg_tb">
+					<thead>
+						<tr>
+							<th colspan="2" class="titulo_tabla">Volume Miner Conversion
+							</th>
+						</tr>
+						<tr>
+							<th class="titulo_tabla"><input v-model="miner_conversion.daily" style="width: 40px;"></input> Days</th>
+							<th class="titulo_tabla"><my-currency-input texto-campo="Daily transactions" v-model="miner_conversion.volumen_per"></my-currency-input></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td rowspan="2">Miner development fee</td>
+							<td align="right">{{ miner_conversion.miner_tax*100 }}%</td>
+						</tr>
+						<tr>
+							<td align="right">{{ miner_fee_price | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Cost Per Miner</td>
+							<td align="right">{{miner_conversion.cost_per_miner | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>Set up Fee </td>
+							<td align="right">{{miner_conversion.setup_fee * 100}}%</td>
+						</tr>
+						<tr>
+							<td>Total Miner Price</td>
+							<td align="right">{{ price_per_miner | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td class="amarillo">QTY Miners</td>
+							<td class="amarillo" align="right">{{ qty_miners }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style=" display: block; float: left; width: 31%; margin-left: 10px;">
+				<table class="table align-middle bkgamarillo_tb titulo_tabla2">
 				<thead>
 					<tr>
-						<th colspan="2">MINER YEILD - 1 Miner</th>
+						<th class="titulo_tabla2">{{qty_miners}} Miners liquidity yield back to REU</th>
 					</tr>
 				</thead>
 				<tbody>
 					<tr>
-						<td>DAILY REWARD</td>
-						<td>{{ miner_yeild.income | currencydecimal }}</td>
+						<td>Daily Yield <br><span class="grande">{{ daily_yield | currencydecimal }}</span></td>
+					</tr>					
+					<tr class="titulo_tabla2">
+						<td>
+							Weekly <br><span class="grande">
+							{{ daily_yield*7 | currencydecimal }}</span></td>
+					</tr>
+					<tr class="titulo_tabla2">
+						<td>
+							Monthly <br><span class="grande">
+							{{ daily_yield * 28 | currencydecimal }}</span></td>
+					</tr>
+					<tr class="titulo_tabla2">
+						<td>
+							Yearly <br><span class="grande">
+							{{ daily_yield*364 | currencydecimal}}</span></td>
 					</tr>
 					<tr>
-						<td>OVER CLOCK RATE</td>
-						<td>{{ miner_yeild.over_clock_rate*100 }}%</td>
-					</tr>
-					<tr>
-						<td>TOTAL REWARD</td>
-						<td>{{totalReward | currencydecimal}}</td>
-					</tr>
-					<tr>
-						<td>POWER BILL</td>
-						<td>{{ miner_yeild.power_bill | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td rowspan="2">LIQUID EFFICIENCY</td>
-						<td>{{ miner_yeild.liquid_efficiency_rate*100 }}%</td>
-					</tr>
-					<tr>
-						<td>{{ liquid_efficiency  | currencydecimal}}</td>
-					</tr>
-					<tr>
-						<td>OC POWER BILL</td>
-						<td>{{ oc_power_bill | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>HOSTING FEE {{ Math.abs(miner_yeild.hosting_fee_rate*100) }}%</td>
-						<td>{{ hosting_fee | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>TOTAL COSTS</td>
-						<td>{{ total_cost | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>TOTAL REWARD</td>
-						<td>{{ total_reward_miner | currencydecimal }}</td>
+						<td></td>
 					</tr>
 				</tbody>
-			</table>
-			<table class="table align-middle">
-				<thead>
-					<tr>
-						<th colspan="2">VOLUME MINER CONVERSION 
-							<my-currency-input v-model="miner_conversion.volumen_per"></my-currency-input> Daily transactions
-						</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td rowspan="2">Miner development fee</td>
-						<td>{{ miner_conversion.miner_tax*100 }}%</td>
-					</tr>
-					<tr>
-						<td>{{ miner_fee_price | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>Cost Per Miner</td>
-						<td>{{miner_conversion.cost_per_miner | currencydecimal}}</td>
-					</tr>
-					<tr>
-						<td>Set up Fee </td>
-						<td>{{miner_conversion.setup_fee * 100}}%</td>
-					</tr>
-					<tr>
-						<td>Total Miner Price</td>
-						<td>{{ price_per_miner | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>QTY Miners</td>
-						<td>{{ qty_miners }}</td>
-					</tr>
-				</tbody>
-			</table>
-			<table class="table align-middle">
-				<thead>
-					<tr>
-						<th colspan="2">{{qty_miners}} Miners liquidity yield back to REU</th>
-					</tr>
-				</thead>
-				<tbody>
-					<tr>
-						<td>
-							Daily Yield
-							{{ daily_yield | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>
-							Weekly
-							{{ daily_yield*7 | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>
-							Monthly
-							{{ daily_yield * 28 | currencydecimal }}</td>
-					</tr>
-					<tr>
-						<td>
-							Yearly
-							{{ daily_yield*364 | currencydecimal}}</td>
-					</tr>
-				</tbody>
-			</table>
+				</table>
+			</div>
 		</div>
 		
 		
 	</div>
 	<script type="text/javascript">
 		Vue.component('my-currency-input', {
-    props: ["value"],
+    props: ["value", "textoCampo"],
     template: `
         <div>
-            <input type="text" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true"/>
+            <input type="text"  style="width: 100px;" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true"/> {{textoCampo}}
         </div>`,
     data: function() {
         return {
