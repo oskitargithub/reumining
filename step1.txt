@@ -1,0 +1,136 @@
+Install "Code Snippets" : https://es.wordpress.org/plugins/code-snippets/
+Add new snipped, fill title with "vue_snippet", and code with:
+
+add_action( 'wp_head', function () { ?>
+<script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<?php } );
+
+add_action( 'wp_footer', function () { ?>
+    <script>	
+    Vue.component('my-currency-input', {
+    props: ["value", "textoCampo"],
+    template: `
+        <div>
+            <input type="text"  style="width: 100px;" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true"/> {{textoCampo}}
+        </div>`,
+    data: function() {
+        return {
+            isInputActive: false
+        }
+    },
+    computed: {
+        displayValue: {
+            get: function() {
+                if (this.isInputActive) {
+                    // Cursor is inside the input field. unformat display value for user
+                    return this.value.toString()
+                } else {
+                    // User is not modifying now. Format display value for user interface
+                    return "$ " + this.value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+                }
+            },
+            set: function(modifiedValue) {
+                // Recalculate value after ignoring "$" and "," in user input
+                let newValue = parseFloat(modifiedValue.replace(/[^\d\.]/g, ""))
+                // Ensure that it is not NaN
+                if (isNaN(newValue)) {
+                    newValue = 0
+                }
+                // Note: we cannot set this.value as it is a "prop". It needs to be passed to parent component
+                // $emit the event so that parent component gets it
+                this.$emit('input', newValue)
+            }
+        }
+    }
+});
+		new Vue({
+			el: '#app',
+			data () {
+				return {
+					miner_yeild: {
+						income: 0,
+						over_clock_rate: 0.3,
+						power_bill: -9.28,
+						liquid_efficiency_rate: -0.1,
+						hosting_fee_rate: -0.05
+					},
+					miner_conversion: {
+						volumen_per: 100000,
+						daily: 30,
+						miner_tax: 0.04,
+						miner_conversion: 10500,
+						setup_fee: 0.33,
+						cost_per_miner: 10500,
+					},
+					btc: 0,
+					loading: true,
+					errored: false
+			}
+		},
+  computed: {
+    totalReward: function () {
+      return (this.miner_yeild.income*this.miner_yeild.over_clock_rate)+this.miner_yeild.income
+    },
+		liquid_efficiency: function () {
+      return (this.miner_yeild.power_bill*this.miner_yeild.liquid_efficiency_rate)
+    },
+		oc_power_bill: function () {
+      return (this.miner_yeild.over_clock_rate*this.miner_yeild.power_bill)
+    },
+		hosting_fee: function () {
+      return (this.totalReward * this.miner_yeild.hosting_fee_rate)
+    },
+		total_cost: function () {
+			return (this.miner_yeild.power_bill + this.liquid_efficiency + this.oc_power_bill + this.hosting_fee)
+		},
+		total_reward_miner: function () {
+      return (this.totalReward + this.total_cost)
+    },
+		volume_daily: function () {
+			return (this.miner_conversion.volumen_per * this.miner_conversion.daily)
+		},
+		miner_fee_price: function () {
+			return (this.volume_daily * this.miner_conversion.miner_tax)
+		},
+		price_per_miner: function () {
+			return ((this.miner_conversion.cost_per_miner*this.miner_conversion.setup_fee) + this.miner_conversion.cost_per_miner)
+		},
+		qty_miners: function () {
+			return Math.floor(this.miner_fee_price / this.price_per_miner)
+		},
+		daily_yield: function () {
+			return (this.total_reward_miner * this.qty_miners)
+		}
+  },
+		filters: {
+			/*currencydecimal (value) {
+				return value.toFixed(2)
+			},*/
+			currencydecimal (value) {
+				return "$ " + value.toFixed(2).replace(/(\d)(?=(\d{3})+(?:\.\d+)?$)/g, "$1,")
+			}
+		},
+		mounted () {
+			axios.get('https://api.minerstat.com/v2/coins?list=BTC')
+			.then(response => {
+				datos = response.data[0]
+				this.btc = datos.price
+				var rpb = Number.parseFloat(datos.reward_block)
+				var hasrate = Number.parseFloat(100000000000000)
+				var dif = Number.parseFloat(datos.difficulty)
+				var resultbtc = (rpb * hasrate * 86400) / (dif * Math.pow(2, 32))
+				this.income = resultbtc*datos.price
+				this.miner_yeild.income = resultbtc*datos.price
+				
+			})
+			.catch(error => {
+        console.log(error)
+        this.errored = true
+      })
+			.finally(() => this.loading = false)
+		}
+	})
+    </script>
+
+<?php } );
