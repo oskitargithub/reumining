@@ -1,5 +1,6 @@
-Create new WordPress Page
-Add "Html" code:
+Add "Html" code to the new wordpress page:
+
+
 <div id="app">
 		<div id="ResponseContent">
 			<h2 class="titulo_tabla">BTC Price {{ btc | currencydecimal }}</h2>
