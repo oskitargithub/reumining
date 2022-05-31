@@ -1,5 +1,6 @@
+Create new WordPress Page. Name it whatever you want, but remember the "slug" name to replace it now later
 Install "Code Snippets" : https://es.wordpress.org/plugins/code-snippets/
-Add new snipped, fill title with "vue_snippet", and code with:
+Add new snipped, fill title with "vue_snippet", and code with (Replace at line 11, btcmining with your slug page name):
 
 add_action( 'wp_head', function () { ?>
 <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
