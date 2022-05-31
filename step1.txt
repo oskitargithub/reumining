@@ -6,7 +6,10 @@ add_action( 'wp_head', function () { ?>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <?php } );
 
-add_action( 'wp_footer', function () { ?>
+add_action( 'wp_footer', function () { 
+	if (is_page('btcmining')) { // Add slug in condition
+?>
+
     <script>	
     Vue.component('my-currency-input', {
     props: ["value", "textoCampo"],
@@ -133,4 +136,4 @@ add_action( 'wp_footer', function () { ?>
 	})
     </script>
 
-<?php } );
+<?php } } );
