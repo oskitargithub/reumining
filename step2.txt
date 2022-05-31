@@ -1,0 +1,131 @@
+Create new WordPress Page
+Add "Html" code:
+<div id="app">
+		<div id="ResponseContent">
+			<h2 class="titulo_tabla">BTC Price {{ btc | currencydecimal }}</h2>
+		</div>
+		<div class="content">
+			<div style=" display: block; float: left; width: 67%;">
+				<table class="table align-middle bkg_tb" >
+					<thead>
+						<tr>
+							<th colspan="2" class="titulo_tabla">Daily Reward - 1 Miner</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td class="titulo_tabla2">DAILY REWARD</td>
+							<td align="right">{{ miner_yeild.income | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Over Clock (OC) Rate</td>
+							<td align="right">{{ miner_yeild.over_clock_rate*100 }}%</td>
+						</tr>
+						<tr>
+							<td>Total REWARD</td>
+							<td align="right">{{totalReward | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>POWER BILL</td>
+							<td align="right" :class="{rojo: miner_yeild.power_bill < 0}">{{ miner_yeild.power_bill | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td rowspan="2">Liquid Efficiency</td>
+							<td align="right">{{ miner_yeild.liquid_efficiency_rate*100 }}%</td>
+						</tr>
+						<tr>
+							<td align="right">{{ liquid_efficiency  | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>OC Power Bill</td>
+							<td align="right" :class="{rojo: oc_power_bill < 0}">{{ oc_power_bill | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Hosting Fee {{ Math.abs(miner_yeild.hosting_fee_rate*100) }}%</td>
+							<td align="right" :class="{rojo: hosting_fee < 0}">{{ hosting_fee | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Total Cost</td>
+							<td align="right" :class="{rojo: total_cost < 0}">{{ total_cost | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td class="amarillo">TOTAL REWARD</td>
+							<td class="amarillo" align="right">{{ total_reward_miner | currencydecimal }}</td>
+						</tr>
+					</tbody>
+				</table>
+				<br/>
+				<table class="table align-middle bkg_tb">
+					<thead>
+						<tr>
+							<th colspan="2" class="titulo_tabla">Volume Miner Conversion
+							</th>
+						</tr>
+						<tr>
+							<th class="titulo_tabla"><input v-model="miner_conversion.daily" style="width: 40px;"></input> Days</th>
+							<th class="titulo_tabla"><my-currency-input texto-campo="Daily transactions" v-model="miner_conversion.volumen_per"></my-currency-input></th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td rowspan="2">Miner development fee</td>
+							<td align="right">{{ miner_conversion.miner_tax*100 }}%</td>
+						</tr>
+						<tr>
+							<td align="right">{{ miner_fee_price | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td>Cost Per Miner</td>
+							<td align="right">{{miner_conversion.cost_per_miner | currencydecimal}}</td>
+						</tr>
+						<tr>
+							<td>Set up Fee </td>
+							<td align="right">{{miner_conversion.setup_fee * 100}}%</td>
+						</tr>
+						<tr>
+							<td>Total Miner Price</td>
+							<td align="right">{{ price_per_miner | currencydecimal }}</td>
+						</tr>
+						<tr>
+							<td class="amarillo">QTY Miners</td>
+							<td class="amarillo" align="right">{{ qty_miners }}</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div style=" display: block; float: left; width: 31%; margin-left: 10px;">
+				<table class="table align-middle bkgamarillo_tb titulo_tabla2">
+				<thead>
+					<tr>
+						<th class="titulo_tabla2">{{qty_miners}} Miners liquidity yield back to REU</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Daily Yield <br><span class="grande">{{ daily_yield | currencydecimal }}</span></td>
+					</tr>					
+					<tr class="titulo_tabla2">
+						<td>
+							Weekly <br><span class="grande">
+							{{ daily_yield*7 | currencydecimal }}</span></td>
+					</tr>
+					<tr class="titulo_tabla2">
+						<td>
+							Monthly <br><span class="grande">
+							{{ daily_yield * 28 | currencydecimal }}</span></td>
+					</tr>
+					<tr class="titulo_tabla2">
+						<td>
+							Yearly <br><span class="grande">
+							{{ daily_yield*364 | currencydecimal}}</span></td>
+					</tr>
+					<tr>
+						<td></td>
+					</tr>
+				</tbody>
+				</table>
+			</div>
+		</div>
+		
+		
+	</div>
